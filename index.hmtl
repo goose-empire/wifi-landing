@@ -3,196 +3,233 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wi-Fi Access Terms</title>
-
-  <!-- Google Fonts: Martian Mono -->
+  <title>Wi-Fi Access - Pizza Hawaii Terms</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Google Font 'Martian Mono' -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    body {
       font-family: 'Martian Mono', monospace;
     }
-
-    body {
-      min-height: 100vh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 40px 24px 32px 24px;
-      /* Background full-cover image */
-      background: url('./pizza-hawaii.jpg') center center / cover no-repeat fixed;
+    
+    /* Background setup with fallbacks */
+    .pizza-bg {
+      background-color: #2b1408;
+      background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+        url('../pizza-hawaii.jpg'), 
+        url('pizza-hawaii.jpg'), 
+        url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
 
-    /* Top/Middle White Terms Card */
-    .card {
-      background: #FFFFFF;
-      width: 100%;
-      max-width: 360px;
-      border-radius: 24px;
-      padding: 32px 24px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-
-    .card-title {
-      color: #9C2A10;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
-
-    /* Consent Checkbox Area */
-    .consent-container {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      text-align: left;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    /* Custom Checkbox Design matching screenshot */
+    /* Custom Checkbox Animation & Styling */
     .custom-checkbox {
-      position: relative;
-      width: 48px;
-      height: 48px;
-      min-width: 48px;
-      background-color: #A42A0D;
-      border-radius: 14px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .checkbox-box {
+      width: 64px;
+      height: 64px;
+      min-width: 64px;
+      border-radius: 18px;
+      background-color: #f3f4f6;
+      border: 3px solid #d1d5db;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
     }
 
-    /* Hide real checkbox input */
-    .consent-container input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
+    .checked .checkbox-box {
+      background-color: #9d2503; /* Match warm reddish-brown from image */
+      border-color: #9d2503;
     }
 
-    /* Checkmark Icon */
-    .checkmark {
-      width: 24px;
-      height: 24px;
-      fill: none;
-      stroke: #FFFFFF;
-      stroke-width: 3.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      opacity: 0;
-      transform: scale(0.6);
-      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    /* Checked State styling */
-    .consent-container input:checked ~ .custom-checkbox .checkmark {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .consent-container input:not(:checked) ~ .custom-checkbox {
-      background-color: #D6C2B8; /* Muted state before check */
-    }
-
-    .consent-text {
-      color: #000000;
-      font-size: 13px;
-      font-weight: 800;
-      line-height: 1.4;
-      text-transform: uppercase;
-    }
-
-    /* Bottom Floating Button */
-    .cta-btn {
-      width: 100%;
-      max-width: 360px;
-      background-color: #F6E294;
-      color: #9C2A10;
-      border: none;
-      border-radius: 18px;
-      padding: 20px 16px;
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s ease;
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    .cta-btn.enabled {
-      opacity: 1;
-      pointer-events: auto;
-      cursor: pointer;
-    }
-
-    .cta-btn.enabled:active {
-      transform: scale(0.98);
-    }
-
-    /* Hidden credentials container revealed after tap */
-    .wifi-reveal {
+    .checkmark-icon {
       display: none;
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 2px dashed #E5D5C5;
-      text-align: center;
+      color: #ffffff;
     }
 
-    .wifi-reveal h4 {
-      color: #9C2A10;
-      margin-bottom: 8px;
+    .checked .checkmark-icon {
+      display: block;
     }
 
-    .wifi-reveal code {
-      background: #F4ECE1;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 14px;
-      color: #000;
+    /* Primary CTA Button Color Palette */
+    .btn-connect {
+      background-color: #f7e49a; /* Golden yellow matching image */
+      color: #8c2800; /* Warm brown/red text */
+      transition: all 0.2s ease;
+    }
+
+    .btn-connect:not(:disabled):hover {
+      background-color: #f5dc7d;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .btn-connect:not(:disabled):active {
+      transform: translateY(1px);
+    }
+
+    .btn-connect:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
   </style>
 </head>
-<body>
+<body class="pizza-bg min-h-screen flex items-center justify-center p-4 sm:p-6">
 
-  <!-- Terms Card -->
-  <div class="card">
-    <div class="card-title">ACCEPT THE TERMS</div>
+  <!-- Main Card Container -->
+  <main class="w-full max-w-[420px] flex flex-col gap-5 my-auto">
+    
+    <!-- State 1: Consent Form View -->
+    <div id="consentCard" class="flex flex-col gap-4">
+      
+      <!-- Top Card (White Box matching image) -->
+      <section class="bg-white rounded-[28px] p-6 sm:p-8 shadow-2xl flex flex-col items-center text-center">
+        <!-- Subtitle -->
+        <h2 class="text-[#8c2800] text-sm sm:text-base font-bold tracking-wider mb-6 sm:mb-8 uppercase">
+          ACCEPT THE TERMS
+        </h2>
 
-    <label class="consent-container" for="pizzaConsent">
-      <input type="checkbox" id="pizzaConsent" onchange="toggleCTA()">
-      <div class="custom-checkbox">
-        <svg class="checkmark" viewBox="0 0 24 24">
-          <polyline points="20 6 9 17 4 12"></polyline>
+        <!-- Interactive Checkbox Container -->
+        <label for="consentCheckbox" class="custom-checkbox flex items-start sm:items-center gap-4 cursor-pointer select-none text-left w-full group">
+          <input type="checkbox" id="consentCheckbox" class="hidden" onchange="handleConsentChange(this)">
+          
+          <!-- Custom Checkbox Box -->
+          <div id="boxVisual" class="checkbox-box group-hover:border-[#9d2503] shadow-inner">
+            <svg class="checkmark-icon w-9 h-9 stroke-[3.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+
+          <!-- Consent Text -->
+          <span class="text-black font-extrabold text-sm sm:text-[15px] leading-snug tracking-tight uppercase pt-1 sm:pt-0">
+            I CONSENT THAT PIZZA HAWAII IS A DELICIOUS AND ACCEPTABLE PIECE OF FOOD
+          </span>
+        </label>
+      </section>
+
+      <!-- Bottom CTA Button (Yellow Box matching image) -->
+      <button 
+        id="connectBtn" 
+        disabled 
+        onclick="showWifiAccess()" 
+        class="btn-connect w-full py-5 rounded-[22px] font-extrabold text-base sm:text-lg tracking-wide uppercase shadow-lg text-center"
+      >
+        CONNECT TO WIFI
+      </button>
+    </div>
+
+    <!-- State 2: Access Granted View (Hidden by default) -->
+    <div id="accessCard" class="hidden bg-white rounded-[28px] p-6 sm:p-8 shadow-2xl flex flex-col items-center text-center transition-all duration-300">
+      <div class="inline-flex items-center justify-center w-14 h-14 bg-green-100 rounded-full mb-3 text-green-700">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
         </svg>
       </div>
-      <span class="consent-text">
-        I CONSENT THAT PIZZA HAWAII IS A DELICIOUS AND ACCEPTABLE PIECE OF FOOD
-      </span>
-    </label>
 
-    <!-- Appears in card after clicking CTA -->
-    <div id="wifiReveal" class="wifi-reveal">
-      <h4>SSID: MyHomeNetwork</h4>
-      <p>Password: <code>supersecret123</code></p>
+      <h2 class="text-[#8c2800] text-xl font-extrabold uppercase mb-1">
+        ACCESS GRANTED!
+      </h2>
+      <p class="text-xs text-gray-500 font-medium mb-6">Scan code or use credentials below</p>
+
+      <!-- QR Code Display -->
+      <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 mb-6 flex flex-col items-center">
+        <img 
+          src="https://api.qrserver.com/v1/create-qr-code/?data=WIFI:S:PIZZA%20HAWAII;T:WPA;P:pineapple;;&size=200x200" 
+          alt="Wi-Fi QR Code" 
+          class="w-48 h-48 rounded-lg shadow-sm"
+          onerror="this.src='https://placehold.co/200x200/fff/000?text=Scan+Camera+App'"
+        />
+        <span class="text-[11px] text-gray-400 mt-2 font-semibold">Point camera to auto-connect</span>
+      </div>
+
+      <!-- Network Details -->
+      <div class="w-full bg-orange-50 rounded-xl p-4 text-left border border-orange-100 mb-5 flex flex-col gap-2">
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-gray-500 font-bold uppercase">SSID:</span>
+          <span class="font-extrabold text-black">PIZZA HAWAII</span>
+        </div>
+        <div class="h-[1px] bg-orange-100/80 w-full"></div>
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-gray-500 font-bold uppercase">Password:</span>
+          <span class="font-extrabold text-[#9d2503] font-mono">pineapple</span>
+        </div>
+      </div>
+
+      <!-- Copy Button -->
+      <button 
+        id="copyBtn"
+        onclick="copyPassword()" 
+        class="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-all mb-3 flex items-center justify-center gap-2"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+        </svg>
+        <span id="copyBtnText">COPY PASSWORD</span>
+      </button>
+
+      <!-- Direct URI Trigger Link -->
+      <a 
+        href="WIFI:S:PIZZA HAWAII;T:WPA;P:pineapple;;" 
+        class="text-xs text-[#8c2800] underline font-bold hover:text-red-700 transition-colors pt-1"
+      >
+        Direct Auto-Join Prompt
+      </a>
     </div>
-  </div>
 
-  <!-- Bottom Action
+  </main>
+
+  <script>
+    // Handle Checkbox Toggle logic
+    function handleConsentChange(checkbox) {
+      const label = checkbox.closest('label');
+      const connectBtn = document.getElementById('connectBtn');
+
+      if (checkbox.checked) {
+        label.classList.add('checked');
+        connectBtn.removeAttribute('disabled');
+      } else {
+        label.classList.remove('checked');
+        connectBtn.setAttribute('disabled', 'true');
+      }
+    }
+
+    // Switch card view to display Wi-Fi details
+    function showWifiAccess() {
+      document.getElementById('consentCard').classList.add('hidden');
+      document.getElementById('accessCard').classList.remove('hidden');
+    }
+
+    // Safe fallback copy to clipboard
+    function copyPassword() {
+      const password = "pineapple";
+      const btnText = document.getElementById('copyBtnText');
+      
+      // Fallback clipboard logic
+      const el = document.createElement('textarea');
+      el.value = password;
+      document.body.appendChild(el);
+      el.select();
+      try {
+        document.execCommand('copy');
+        btnText.innerText = "COPIED TO CLIPBOARD!";
+        setTimeout(() => {
+          btnText.innerText = "COPY PASSWORD";
+        }, 2500);
+      } catch (err) {
+        console.error("Unable to copy", err);
+      }
+      document.body.removeChild(el);
+    }
+  </script>
+</body>
+</html>
